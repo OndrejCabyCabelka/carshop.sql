@@ -370,3 +370,13 @@ FROM car c
 SELECT c.id,c.manufacturer,c.model,c.garage_id,c.SPZ,c.Max_Speed,c.Collor,c.description
 FROM car c
 WHERE SPZ LIKE '%S%'
+
+
+
+
+
+---
+SELECT c.id,c.manufacturer,c.model,c.garage_id,c.SPZ,c.Max_Speed,c.Collor,c.description
+FROM car c
+WHERE Max_Speed LIKE '120'
+;
