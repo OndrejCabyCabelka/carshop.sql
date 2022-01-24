@@ -1,10 +1,8 @@
--- Vytvoření databaze : 
 
 CREATE DATABASE Nazev databaze;
 
 
 
--- Vytvoření tabulky :
 
  CREATE TABLE car (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -13,22 +11,17 @@ CREATE DATABASE Nazev databaze;
 );
 
 
--- Smazání DATABAZE 
 DROP DATABASE jmeno_database;
 
---DRUHÁ HODINA AUTAAAA //
 
--- vkládání řádku do tabulky
 id INT UNSIGNED AUTO_INCREMENT,
 INSERT INTO car (id, manufacturer, model),
 VALUES (2,"Mercedes", "E63 AMG"),
 ;
 
--- Zjištění id
 SELECT *
 FROM CAR
 
---zrušení tabulky
 DROP TABLE car;
 
 
@@ -93,12 +86,6 @@ INSERT INTO car (id, manufacturer, model)
 VALUES ('20', 'BMW', 'M5');
 
 
-
-
-
--- Vytvoření tabulky garage a vložení sloupců (capacity. ... atd.) //
--- GPS následně předěláno na FLOAT //
-
 CREATE TABLE garage(
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   capacity VARCHAR(255),
@@ -107,8 +94,6 @@ CREATE TABLE garage(
   name VARCHAR(255),
   description VARCHAR(255)
 );
-
--- Vložení do tabulky : 5 garáží  //
 
 INSERT INTO garage (capacity, gps_x, gps_y, name, description)
 VALUES (5, '50.0232', '21.8523', 'Garaz_1', 'Popis_1')
@@ -152,7 +137,6 @@ VALUES (12, '50.0524', '15.1452', 'Garaz_10', 'Popis_10')
 ;
 //////////////////////
 
--- Vytvoření tabulky employee a vložení sloupců (id .... atd) //
 
 CREATE TABLE employee(
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -222,11 +206,9 @@ INSERT INTO employee (firstname, lastname, email, phone, birthdate, description)
 VALUES ('Filip', 'Donald', 'Donald@seznam.cz', '720556', '9.8.2005','popisek')
 ;
 
-------------Přidání car_id do tabulky employee-------------
   ALTER TABLE employee
   ADD car_id varchar(255);
 
--------Update employee update id -----------
 UPDATE employee
 SET car_id = 4
 WHERE id = 1;
@@ -251,12 +233,10 @@ UPDATE employee
 SET car_id = 7
 WHERE id = 6;
 
--------------- První část název tabulky a potom tabulka a sloupec kam se to odkazuje ---------------------
 ALTER TABLE employee
 ADD FOREIGN KEY (car_id) 
 REFERENCES car(id);
 
--------Pro spočítání můžete využít i funkci COUNT---------
 SELECT COUNT(*) AS pocet_aut
 FROM car;
 
@@ -268,24 +248,17 @@ FROM garage;
 
 
 
---------------------------------Propojení tabulek car a garage------------------------------------------
 
 ALTER TABLE employee
 ADD FOREIGN KEY (car_id) 
 REFERENCES garage(id);
 
 
-
-------------------------Vytvoření Nové tabulky accessory a řádky------------------------------------
-
 CREATE TABLE accessory(
 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255),
 description VARCHAR(255)
 );
-
-
---------------Vložení do tabulky přídavkových věcí do auta---------------
 
 INSERT INTO accessory (name, description)
 VALUES ('Zahřívané sedačky', 'popisek')
@@ -300,15 +273,11 @@ VALUES ('Zahřívané sedačky', 'popisek')
  ('Wifi', 'popisek')
 ;
 
-
-
------------------------------------Vytvoření tabulky Car_accessory + řádky---------------------------------------------
 CREATE TABLE car_accessory(
 car_id VARCHAR(255),
 accessory_id VARCHAR(255)
 );
 
--------------------------PROPOJENÍ CAR_ACCESSORY A CAR A ACCESSORY------------------------------------- 
 ALTER TABLE car_accessory
 ADD FOREIGN KEY (car_id) 
 REFERENCES car(id);
@@ -318,7 +287,6 @@ ADD FOREIGN KEY (accessory_id)
 REFERENCES accessory(id);
 
 
---------------------PŘIDÁNNÍ ID VOZIDLA A ID ACCESSORY-------------------
 INSERT INTO car_accessory (car_id, accessory_id)
 VALUES ('1''5')
 ('2','5'),
@@ -336,7 +304,6 @@ VALUES ('1''5')
 ('14','5')
 ;
 
--------------------Přidání 3 ACCESORY K JEDNOMU AUTU 5X----------------------
 INSERT INTO car_accessory (car_id, accessory_id)
 VALUES ('16','5'),
 ('16','10'),
@@ -363,22 +330,18 @@ VALUES ('20','9'),
 ('20','2');
 
 
---------------------------Výpis celé tabulky----------------------------------
 SELECT * FROM TABLE_NAME;
 
 
------------------tabulka zaměstnanců napojená na auto-------------------
 SELECT * 
 FROM employee e
 JOIN car c ON e.car_id = c.id;
 
 
--------------------+ NAPOJENÍ NA ZNAČKU A MODEL AUTA-----------------------------
 SELECT e.firstname, e.lastname, e.email, e.phone,c.manufacturer,c.model
 FROM employee e
 JOIN car c ON e.car_id = c.id;
 
----------- Udělá to že zaznamená i lidi kteří nemají auto ------------------------
 LEFT JOIN car c ON e.car_id = c.id; 
 
 -//-
@@ -391,25 +354,19 @@ SELECT e.firstname,e.lastname,c.manufacturer,c.model
 FROM employee e
 LEFT JOIN car c ON e.car_id = c.id;
 
-----ODEBRÁNÍ AUTO ZAMĚSTNANCOVI----------
 UPDATE employee
 SET car_id = NULL
 WHERE id = 1;
 
-------------Propojte všechna auta s příslušenstvím konkrétních aut--------------------
------------car <-> car_accessory <-> accessory----------------
----------id (auta), manufacturer, model, name (příslušenství), description (příslušenství)-----------
 SELECT c.model,c.manufacturer,a.name,a.description,c.id
 FROM car c
 LEFT JOIN car_accessory c_a ON c.id =c_a.car_id
 LEFT JOIN accessory a ON c.id=c_a.accessory_id
 
-------------------------Výpis tabulky CAR s auty které jedou nad 120 protože tam jsou pouze sportovní :D ------------------------
 SELECT c.id,c.manufacturer,c.model,c.garage_id,c.SPZ,c.Max_Speed,c.Collor,c.description
 FROM car c
 
 
-----------------------TENTO PŘÍKAZ VYBERE AUTA KTERÉ OBSAHUJÍ SPZ S PÍSMENEM S--------------------
 SELECT c.id,c.manufacturer,c.model,c.garage_id,c.SPZ,c.Max_Speed,c.Collor,c.description
 FROM car c
 WHERE SPZ LIKE '%S%'
